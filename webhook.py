@@ -2,7 +2,7 @@ import socketio
 from aiohttp import web
 import json
 
-sio = socketio.AsyncServer(cors_allowed_origins=["http://localhost:3000"])
+sio = socketio.AsyncServer(cors_allowed_origins=["http://host.docker.internal:4001"])
 
 routes = web.RouteTableDef()
 
