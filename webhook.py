@@ -52,8 +52,8 @@ async def post_handler(request):
     print("post received")
     data = await request.json()
     if data["type"] == "Exhausts" or data["type"] == "Supplies":
-        if "cfm" in data:
-            nodes[data["type"]][data["node"]] = [data["status"], data["cfm"]]
+        if "cfm" in data and "type_status" in data:
+            nodes[data["type"]][data["node"]] = [data["status"], data["cfm"], data["type_status"]]
         else:
             nodes[data["type"]][data["node"]][0] = data["status"]
     else:
@@ -76,7 +76,7 @@ async def send_nodes(sid):
     for node_type in nodes:
         if node_type == "Exhausts" or node_type == "Supplies":
             for node in nodes[node_type]:
-                await sio.emit("node_changed", [node_type, node, nodes[node_type][node][0], nodes[node_type][node][1]], sid)
+                await sio.emit("node_changed", [node_type, node, nodes[node_type][node][0], nodes[node_type][node][1], nodes[node_type][node][2]], sid)
         else:
             for node in nodes[node_type]:
                 await sio.emit("node_changed", [node_type, node, nodes[node_type][node]], sid)
